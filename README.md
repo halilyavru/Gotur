@@ -1,8 +1,8 @@
 # Gotur
 
 Takım Üyeleri:
- - Halil Yavru
- - Ekrem Koçak
+ - Halil Yavru - Android
+ - Ekrem Koçak - Android
 
 Proje: Ev Yemekleri Satışı Uygulaması
 
