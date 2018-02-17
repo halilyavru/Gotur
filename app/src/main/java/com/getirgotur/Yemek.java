@@ -11,7 +11,7 @@ public class Yemek implements Serializable {
     private String id;
     private String adi;
     private String resimUrl;
-    private double fiyat;
+    private String fiyat;
     private String fiyatBirimi;
     private String malzeme;
     private int stok;
@@ -22,7 +22,7 @@ public class Yemek implements Serializable {
     public Yemek() {
     }
 
-    public Yemek(String id, String adi, String resimUrl, double fiyat, String fiyatBirimi, String malzeme, int stok, String sahipId, double puan, int puanlamaSayisi) {
+    public Yemek(String id, String adi, String resimUrl, String fiyat, String fiyatBirimi, String malzeme, int stok, String sahipId, double puan, int puanlamaSayisi) {
         this.id = id;
         this.adi = adi;
         this.resimUrl = resimUrl;
@@ -59,11 +59,11 @@ public class Yemek implements Serializable {
         this.resimUrl = resimUrl;
     }
 
-    public double getFiyat() {
+    public String getFiyat() {
         return fiyat;
     }
 
-    public void setFiyat(double fiyat) {
+    public void setFiyat(String fiyat) {
         this.fiyat = fiyat;
     }
 

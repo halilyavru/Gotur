@@ -23,8 +23,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.getirgotur.Giris.GirisActivity;
+import com.getirgotur.Kullanici;
 import com.getirgotur.MainActivity;
 import com.getirgotur.R;
+import com.getirgotur.Yemek;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -40,9 +42,10 @@ import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 import com.wefika.flowlayout.FlowLayout;
 import java.text.NumberFormat;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
@@ -53,6 +56,7 @@ import java.util.UUID;
 
 public class YemekEkleActivity extends AppCompatActivity implements View.OnClickListener{
 
+    private Kullanici kullanici;
     private FlowLayout flowLayout;
     private EditText etChipEkle,etFiyat;
     private Map<String,Boolean> mapChips = new HashMap<>();
@@ -82,6 +86,10 @@ public class YemekEkleActivity extends AppCompatActivity implements View.OnClick
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_yemek_ekle);
 
+        if(getIntent().getSerializableExtra("kullanici") != null){
+            kullanici = (Kullanici) getIntent().getSerializableExtra("kullanici");
+        }
+
         if (getSupportActionBar() != null){
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -90,6 +98,8 @@ public class YemekEkleActivity extends AppCompatActivity implements View.OnClick
         for (int i = 0; i < arrayStok.length; i++) {
             arrayStok[i] = (i+1)+"";
         }
+
+        mAuth = FirebaseAuth.getInstance();
 
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
@@ -101,19 +111,17 @@ public class YemekEkleActivity extends AppCompatActivity implements View.OnClick
                 mapYemekler = new HashMap<>();
 
                 for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
-                    mapYemekler.put(snapshot.getKey().toString(),snapshot.getValue().toString());
+                    mapYemekler.put(snapshot.getValue().toString(),snapshot.getKey().toString());
                 }
-                Collection<String> values = mapYemekler.values();
-                arrayYemekler = values.toArray(new String[values.size()]);
+                List<String> keys = new ArrayList<>(mapYemekler.keySet());
+                arrayYemekler = new String[keys.size()];
+                keys.toArray(arrayYemekler);
 
-                for(String str : arrayYemekler){
-                    System.out.println("str : "+str);
-                }
 
                 ArrayAdapter<String> adapter = new ArrayAdapter<String> (YemekEkleActivity.this, android.R.layout.select_dialog_item, arrayYemekler);
                 acYemek.setThreshold(1);//will start working from first character
                 acYemek.setAdapter(adapter);//setting the adapter data into the AutoCompleteTextView
-                acYemek.setTextColor(Color.RED);
+
 
                 databaseReference.removeEventListener(valueEventListener);
 
@@ -236,6 +244,7 @@ public class YemekEkleActivity extends AppCompatActivity implements View.OnClick
 
                         stok = Integer.parseInt(arrayStok[which]);
                         tvStok.setText(arrayStok[which]);
+                        dialog.dismiss();
                     }
 
                 });
@@ -265,7 +274,43 @@ public class YemekEkleActivity extends AppCompatActivity implements View.OnClick
                 } else if (etFiyat.getText() == null || etFiyat.getText().toString().trim().length() == 0) {
 
                 }else{
-                    //storageReference
+                    String imageUrl = UUID.randomUUID().toString();
+                    uploadImage(imageUrl);
+                    Yemek yemek =  new Yemek();
+                    yemek.setAdi(acYemek.getText().toString());
+                    yemek.setFiyat(etFiyat.getText().toString());
+                    yemek.setId(mapYemekler.get(acYemek.getText()));
+                    yemek.setPuan(0.0);
+                    yemek.setFiyatBirimi("TL");
+                    yemek.setPuanlamaSayisi(0);
+                    yemek.setSahipId(kullanici.getId());
+                    yemek.setStok(stok);
+                    yemek.setResimUrl(imageUrl);
+
+                    String yemeginIcindekiler = "";
+                    for (String key : mapChips.keySet()) {
+
+                        if(yemeginIcindekiler.trim().length()>0){
+                            yemeginIcindekiler += ",";
+                        }
+                        yemeginIcindekiler+=key;
+
+                    }
+
+                    databaseReference = FirebaseDatabase.getInstance().getReference().child("Yemekler").child(mapYemekler.get(acYemek.getText().toString())).child(kullanici.getId());
+                    databaseReference.setValue(yemek);
+                    databaseReference.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            System.out.println("Yemekler : "+dataSnapshot);
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
                 }
                /* portfoy.setSatisFiyati(inputFiyat.getText().toString().trim().replace(".", ""));
                 portfoy.setSatisFiyatBirimi(sp.getSelectedItem().toString());
@@ -313,15 +358,15 @@ public class YemekEkleActivity extends AppCompatActivity implements View.OnClick
         }
     }
 
-    private void uploadImage() {
+    private void uploadImage(String imageUrl) {
 
         if(filePath != null)
         {
             final ProgressDialog progressDialog = new ProgressDialog(this);
-            progressDialog.setTitle("Uploading...");
+            progressDialog.setTitle("Yükleniyor...");
             progressDialog.show();
 
-            StorageReference ref = storageReference.child("images/"+ UUID.randomUUID().toString());
+            StorageReference ref = storageReference.child("images/"+ imageUrl);
             ref.putFile(filePath)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override

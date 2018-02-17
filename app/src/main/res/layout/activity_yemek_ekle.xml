@@ -70,6 +70,7 @@
                     android:layout_height="72dp"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentLeft="true"
+                    android:scaleType="centerCrop"
                     android:visibility="gone"/>
 
 
@@ -282,7 +283,6 @@
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/btn_yemek_ekle"
             android:textColor="@color/beyaz"
-            app:backgroundTint="@color/yesil400"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:drawableTint="@color/beyaz"

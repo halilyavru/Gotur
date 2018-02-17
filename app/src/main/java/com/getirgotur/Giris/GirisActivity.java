@@ -81,9 +81,8 @@ public class GirisActivity extends AppCompatActivity {
                 fragment.setArguments(bundle);
 
                 break;
-
-
         }
+
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.container, fragment)
@@ -184,7 +183,6 @@ public class GirisActivity extends AppCompatActivity {
                 }
 
 
-
             }
 
             @Override
@@ -196,7 +194,6 @@ public class GirisActivity extends AppCompatActivity {
             }
         };
         databaseReference.addValueEventListener(valueEventListener);
-
 
     }
 

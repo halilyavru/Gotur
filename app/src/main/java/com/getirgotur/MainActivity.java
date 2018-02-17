@@ -58,6 +58,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 Intent intent =  new Intent(MainActivity.this, YemekEkleActivity.class);
+                intent.putExtra("kullanici",kullanici);
                 startActivity(intent);
             }
         });
