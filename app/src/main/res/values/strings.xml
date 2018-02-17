@@ -3,10 +3,10 @@
     <string name="giris">Giriş</string>
     <string name="yemek_ekle">Yemek Ekle</string>
     <string name="google_maps_key">AIzaSyAaVA19CxJZ41fEdkoYxln2u4RWyP5_PjY</string>
-
+    <string name="uyari">Uyarı</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-
+    <string name="tamam">Tamam</string>
     <string name="action_settings">Settings</string>
     <string name="kullanici_adi">Kullanıcı Adı</string>
     <string name="yemek_bilgileri">Yemek Bilgileri</string>

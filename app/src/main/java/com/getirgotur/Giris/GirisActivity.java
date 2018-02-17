@@ -15,14 +15,20 @@ import android.widget.Toast;
 import com.getirgotur.MainActivity;
 import com.getirgotur.R;
 import com.getirgotur.Kullanici;
+import com.getirgotur.Yemek;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,7 +40,7 @@ public class GirisActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
     private String TAG = "GirisActivity";
-    private Kullanici kullanici;
+    private Kullanici kullanici ;
     //AUTH
     public FirebaseAuth mAuth;
     private ProgressBar progressBar;
@@ -44,7 +50,7 @@ public class GirisActivity extends AppCompatActivity {
 
 
     //FİREBASE
-
+    private ValueEventListener valueEventListener;
     private DatabaseReference databaseReference;
 
     @Override
@@ -52,7 +58,8 @@ public class GirisActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_giris);
 
-
+        mAuth = FirebaseAuth.getInstance();
+        checkLogin();
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.app_name);
@@ -63,10 +70,6 @@ public class GirisActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
 
-
-        if(savedInstanceState == null){
-            fragmentDegistir(0);
-        }
     }
 
     public void fragmentDegistir(int fragmentSecim){
@@ -93,7 +96,10 @@ public class GirisActivity extends AppCompatActivity {
     }
 
 
-    public void giris(final String kullaniciAdi, final String Konum){
+    public void giris(final String kullaniciAdi, final String konum){
+        kullanici = new Kullanici();
+        kullanici.setAdi(kullaniciAdi);
+        kullanici.setKonum(konum);
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.container, new SplashFragment())
@@ -106,25 +112,7 @@ public class GirisActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInAnonymously:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            boolean isSignedIn = (user != null);
-                            if (isSignedIn) {
-                                kullanici =  new Kullanici();
-                                kullanici.setId(user.getUid());
-
-                                if(user.isAnonymous()){
-                                    kullanici.setAdi(kullaniciAdi);
-                                    fragmentDegistir(1);
-                                    firebaseIslemleri(user);
-
-                                }
-
-
-                            }else{
-                                fragmentDegistir(1);
-
-
-
-                            }
+                            updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInAnonymously:failure", task.getException());
@@ -133,19 +121,85 @@ public class GirisActivity extends AppCompatActivity {
                             fragmentDegistir(1);
                         }
 
-                        Intent intent =  new Intent(GirisActivity.this,MainActivity.class);
-                        startActivity(intent);
-                        finish();
+
                     }
                 });
+    }
+
+    private void updateUI(FirebaseUser user){
+        boolean isSignedIn = (user != null);
+        System.out.println("Giriş : "+isSignedIn);
+        if (isSignedIn) {
+
+            if(kullanici == null){
+                kullanici =  new Kullanici();
+            }
+
+            kullanici.setId(user.getUid());
+
+            if(user.isAnonymous()){
+                firebaseIslemleri(user);
+            }
+
+
+        }else{
+            fragmentDegistir(1);
+        }
     }
 
 
 
     private void firebaseIslemleri(FirebaseUser firebaseUser){
 
-       
 
+
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("Kullanıcılar").child(firebaseUser.getUid());
+
+        valueEventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                System.out.println("dataSnapshot: "+dataSnapshot.toString()+dataSnapshot.getValue());
+
+                if(dataSnapshot.getValue() == null){
+                    Map<String,String> mapKullanici =  new HashMap<>();
+                    mapKullanici.put("adi",kullanici.getAdi());
+                    mapKullanici.put("konum",kullanici.getKonum());
+                    databaseReference.setValue(mapKullanici);
+                }else{
+                    kullanici.setAdi(dataSnapshot.child("adi").getValue().toString());
+                    kullanici.setKonum(dataSnapshot.child("konum").getValue().toString());
+                    if(dataSnapshot.child("yemekler").getValue() != null){
+                        String [] arrayYemekler = dataSnapshot.child("yemekler").getValue().toString().split(",");
+                        kullanici.setListYemeklerim(Arrays.asList(arrayYemekler));
+                    }
+
+                    databaseReference.removeEventListener(valueEventListener);
+                    Intent intent =  new Intent(GirisActivity.this,MainActivity.class);
+                    intent.putExtra("kullanıcı",kullanici);
+                    startActivity(intent);
+                    finish();
+                }
+
+
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+                databaseReference.removeEventListener(valueEventListener);
+                fragmentDegistir(1);
+
+            }
+        };
+        databaseReference.addValueEventListener(valueEventListener);
+
+
+    }
+
+    public void checkLogin(){
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        updateUI(currentUser);
     }
 
 

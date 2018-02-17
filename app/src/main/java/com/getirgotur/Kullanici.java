@@ -13,23 +13,13 @@ public class Kullanici implements Serializable {
     private String id;
     private String adi;
     private String resimUrl;
-    private List<Siparis>  listSiparislerim;
-    private List<Yemek> listYemeklerim;
+    private List<String>  listSiparislerim;
+    private List<String> listYemeklerim;
     private String konum;
     private int maxYemekGoturmeMesafesi;
 
 
     public Kullanici() {
-    }
-
-    public Kullanici(String id, String adi, String resimUrl, List<Siparis> listSiparislerim, List<Yemek> listYemeklerim, String konum, int maxYemekGoturmeMesafesi) {
-        this.id = id;
-        this.adi = adi;
-        this.resimUrl = resimUrl;
-        this.listSiparislerim = listSiparislerim;
-        this.listYemeklerim = listYemeklerim;
-        this.konum = konum;
-        this.maxYemekGoturmeMesafesi = maxYemekGoturmeMesafesi;
     }
 
     public String getId() {
@@ -56,19 +46,19 @@ public class Kullanici implements Serializable {
         this.resimUrl = resimUrl;
     }
 
-    public List<Siparis> getListSiparislerim() {
+    public List<String> getListSiparislerim() {
         return listSiparislerim;
     }
 
-    public void setListSiparislerim(List<Siparis> listSiparislerim) {
+    public void setListSiparislerim(List<String> listSiparislerim) {
         this.listSiparislerim = listSiparislerim;
     }
 
-    public List<Yemek> getListYemeklerim() {
+    public List<String> getListYemeklerim() {
         return listYemeklerim;
     }
 
-    public void setListYemeklerim(List<Yemek> listYemeklerim) {
+    public void setListYemeklerim(List<String> listYemeklerim) {
         this.listYemeklerim = listYemeklerim;
     }
 
@@ -87,6 +77,4 @@ public class Kullanici implements Serializable {
     public void setMaxYemekGoturmeMesafesi(int maxYemekGoturmeMesafesi) {
         this.maxYemekGoturmeMesafesi = maxYemekGoturmeMesafesi;
     }
-
-
 }

@@ -2,6 +2,7 @@ package com.getirgotur.Giris;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
@@ -13,10 +14,12 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import com.getirgotur.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -50,10 +53,15 @@ public class GirisFragment extends Fragment implements OnMapReadyCallback, Locat
     private static int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1453;
     private Marker marker;
 
+    private EditText etKullaniciAdi;
+
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_giris, container, false);
+
+        etKullaniciAdi = (EditText) view.findViewById(R.id.et_kullanici_adi);
 
         mLocationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
 
@@ -79,7 +87,27 @@ public class GirisFragment extends Fragment implements OnMapReadyCallback, Locat
         view.findViewById(R.id.btn_giris_yap).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                misafirGiris();
+
+                if(etKullaniciAdi.getText() != null && etKullaniciAdi.getText().toString().trim().length()>3 && currentLat != 0 && currentLon != 0 ){
+                    ((GirisActivity)getActivity()).giris(etKullaniciAdi.getText().toString().trim(),(currentLat+","+currentLon));
+                }else{
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setTitle(R.string.uyari);
+                    if(etKullaniciAdi.getText() != null || etKullaniciAdi.getText().toString().trim().length()<3){
+                        builder.setMessage("Kullanıcı Adı En az 3 Harften oluşmalı.");
+                    }else if(currentLat != 0 || currentLon != 0){
+                        builder.setMessage("Harita üzerinden bir konum seçiniz.");
+                    }
+                    builder.setPositiveButton(R.string.tamam, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                        }
+                    });
+                    builder.create().show();;
+
+                }
+
             }
         });
 
