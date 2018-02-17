@@ -75,6 +75,14 @@ public class GirisFragment extends Fragment implements OnMapReadyCallback, Locat
         SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+
+        view.findViewById(R.id.btn_giris_yap).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                misafirGiris();
+            }
+        });
+
         return view;
     }
 
