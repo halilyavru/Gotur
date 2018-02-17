@@ -1,331 +1,297 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:padding="12dp"
-    android:background="@color/beyaz">
+    android:background="@color/gri200"
+    android:padding="12dp">
 
-    <!-- Başlık -->
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/yemek_bilgileri"
-        android:textColor="@color/gri700"
-        android:textStyle="bold"
-        android:padding="12dp"
-        android:background="@color/baslik_bg"/>
+        android:layout_height="match_parent"
+        android:orientation="vertical"
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="@android:color/darker_gray"/>
+        android:background="@color/beyaz">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="6dp">
-
-
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/rl_yemek_resim"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="12dp">
-
-            <android.support.v7.widget.CardView
-                android:id="@+id/img_btn_camera"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:contentPadding="12dp"
-                android:clickable="true"
-                android:foreground="?android:attr/selectableItemBackground"
-                android:layout_alignParentLeft="true">
-
-                <android.support.v7.widget.AppCompatButton
-                    android:background="@android:color/transparent"
-                    style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
-                    android:id="@+id/btn_camera"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/resim_ekle"
-                    android:drawableTop="@drawable/ic_add_circle_black_48dp"
-                    android:drawableTint="@color/mavigri500"
-                    android:textColor="@color/mavigri500"
-                    android:clickable="false"
-                    android:drawablePadding="3dp"/>
-
-            </android.support.v7.widget.CardView>
-
-            <ImageView
-                android:id="@+id/iv_yemek_resim"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentLeft="true"
-                android:visibility="gone"/>
-
-
-        </RelativeLayout>
-
-        <!-- Yemek Adi -->
-
-        <LinearLayout
-            android:id="@+id/ll_yemek_adi"
+        <!-- Başlık -->
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="6dp"
-            android:background="?android:attr/selectableItemBackground"
-            android:clickable="true"
-            android:layout_toRightOf="@+id/rl_yemek_resim"
-            android:layout_toEndOf="@+id/rl_yemek_resim">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/yemek_adi"
-                    android:textColor="@color/gri900"
-                    android:layout_marginLeft="6dp"
-                    android:layout_marginRight="6dp"
-                    android:textStyle="bold"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="*"
-                    android:textColor="@android:color/holo_red_dark"
-                    android:textStyle="bold"/>
-
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/tv_yemek_adi"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/seciniz"
-                android:layout_marginLeft="6dp"
-                android:layout_marginRight="6dp"
-                android:drawableRight="@drawable/ic_arrow_drop_down_black_24dp"
-                android:drawableTint="@android:color/tab_indicator_text"/>
-
-
-            <View
-                android:layout_marginTop="6dp"
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:background="@android:color/darker_gray"/>
-
-        </LinearLayout>
-
-
-
-        <!-- Fiyat -->
-
-        <LinearLayout
-            android:id="@+id/ll_fiyat"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="6dp"
-            android:background="?android:attr/selectableItemBackground"
-            android:clickable="true"
-            android:paddingRight="6dp"
-            android:layout_toRightOf="@+id/rl_yemek_resim"
-            android:layout_below="@+id/ll_yemek_adi">
-
-
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/fiyat"
-                    android:textColor="@color/gri900"
-                    android:layout_marginLeft="6dp"
-                    android:layout_marginRight="6dp"
-                    android:textStyle="bold"/>
-
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="*"
-                    android:textColor="@android:color/holo_red_dark"
-                    android:textStyle="bold"/>
-
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/tv_fiyat"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/giriniz"
-                android:layout_marginLeft="6dp"
-                android:layout_marginRight="6dp"
-                android:drawableRight="@drawable/ic_keyboard_hide_black_24dp"
-                android:drawableTint="@android:color/tab_indicator_text"/>
-
-        </LinearLayout>
-
+            android:text="@string/yemek_bilgileri"
+            android:textColor="@color/gri700"
+            android:textStyle="bold"
+            android:padding="12dp"
+            android:background="@color/baslik_bg"/>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
             android:background="@android:color/darker_gray"/>
 
-        <!-- Stok -->
-
-        <LinearLayout
-            android:id="@+id/ll_stok"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="6dp"
-            android:background="?android:attr/selectableItemBackground"
-            android:clickable="true"
-            android:paddingRight="6dp"
-            android:layout_toRightOf="@+id/rl_yemek_resim"
-            android:layout_below="@+id/ll_fiyat">
+            android:padding="6dp">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/rl_yemek_resim"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="12dp">
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/img_btn_camera"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:contentPadding="12dp"
+                    android:clickable="true"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:layout_alignParentLeft="true">
+
+                    <android.support.v7.widget.AppCompatButton
+                        android:background="@android:color/transparent"
+                        style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
+                        android:id="@+id/btn_resim_sec"
+                        android:layout_width="72dp"
+                        android:layout_height="72dp"
+                        android:text="@string/resim_ekle"
+                        android:drawableTop="@drawable/ic_add_circle_black_48dp"
+                        android:drawableTint="@color/mavigri500"
+                        android:textColor="@color/mavigri500"
+                        android:clickable="false"
+                        android:drawablePadding="3dp"/>
+
+                </android.support.v7.widget.CardView>
+
+                <ImageView
+                    android:id="@+id/iv_yemek_resim"
+                    android:layout_width="72dp"
+                    android:layout_height="72dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentLeft="true"
+                    android:visibility="gone"/>
+
+
+            </RelativeLayout>
+
+            <!-- Yemek Adi -->
 
 
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:id="@+id/ll_yemek_adi"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="vertical"
+                android:padding="6dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:layout_toRightOf="@+id/rl_yemek_resim"
+                android:layout_toEndOf="@+id/rl_yemek_resim">
 
-                <TextView
+                <AutoCompleteTextView
+                    android:id="@+id/ac_yemek_adi"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/stok"
-                    android:textColor="@color/gri900"
-                    android:layout_marginLeft="6dp"
-                    android:layout_marginRight="6dp"
-                    android:textStyle="bold"/>
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@+id/btn_chip_ekle"
+                    android:maxLines="1"
+                    android:maxLength="50"
+                    android:hint="@string/yemek"/>
 
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="*"
-                    android:textColor="@android:color/holo_red_dark"
-                    android:textStyle="bold"/>
+                <View
+                    android:layout_marginTop="6dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="@android:color/darker_gray"/>
 
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/tv_stok"
+
+
+            <!-- Fiyat -->
+
+            <LinearLayout
+                android:id="@+id/ll_fiyat"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/seciniz"
-                android:layout_marginLeft="6dp"
-                android:layout_marginRight="6dp"
-                android:drawableRight="@drawable/ic_arrow_drop_down_black_24dp"
-                android:drawableTint="@android:color/tab_indicator_text"/>
-
-        </LinearLayout>
-
-
+                android:orientation="vertical"
+                android:padding="6dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:paddingRight="6dp"
+                android:layout_toRightOf="@+id/rl_yemek_resim"
+                android:layout_below="@+id/ll_yemek_adi">
 
 
-</RelativeLayout>
 
-<View
-android:layout_width="match_parent"
-android:layout_height="0.5dp"
-android:background="@android:color/darker_gray"/>
+                <EditText
+                    android:id="@+id/et_yemek_fiyat"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@+id/btn_chip_ekle"
+                    android:inputType="number"
+                    android:maxLines="1"
+                    android:maxLength="11"
+                    android:hint="@string/fiyat"/>
 
-    <!-- Başlık -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/icindekiler"
-        android:textColor="@color/gri700"
-        android:textStyle="bold"
-        android:padding="12dp"
-        android:background="@color/baslik_bg"/>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="@android:color/darker_gray"/>
-
-    //Chips View
-    <com.wefika.flowlayout.FlowLayout
-        android:id="@+id/flow_layout"
-        android:layout_width = "match_parent"
-        android:layout_height = "wrap_content"
-        android:gravity = "start|top"
-        android:padding="6dp"></com.wefika.flowlayout.FlowLayout>
-
-    <android.support.v7.widget.CardView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        android:foreground="?android:attr/selectableItemBackground"
-        android:layout_alignParentLeft="true">
+            </LinearLayout>
 
 
-        <RelativeLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:layout_below="@+id/view_sperator"
-            android:visibility="visible"
-            android:padding="3dp">
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@android:color/darker_gray"/>
 
-            <EditText
-                android:id="@+id/et_chip_ekle"
+            <!-- Stok -->
+
+            <LinearLayout
+                android:id="@+id/ll_stok"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"
-                android:layout_toLeftOf="@+id/btn_chip_ekle"
-                android:maxLines="1"
-                android:maxLength="50"
-                android:hint="@string/giriniz"/>
+                android:orientation="vertical"
+                android:padding="6dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:paddingRight="6dp"
+                android:layout_toRightOf="@+id/rl_yemek_resim"
+                android:layout_below="@+id/ll_fiyat">
 
-            <android.support.v7.widget.AppCompatButton
-                android:id="@+id/btn_chip_ekle"
-                android:textColor="@color/beyaz"
-                app:backgroundTint="@color/yesil400"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_add_white_18dp"
-                android:drawableTint="@color/beyaz"
-                android:text="@string/ekle"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"/>
+
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/stok"
+                        android:textColor="@color/gri900"
+                        android:layout_marginLeft="6dp"
+                        android:layout_marginRight="6dp"
+                        android:textStyle="bold"/>
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="*"
+                        android:textColor="@android:color/holo_red_dark"
+                        android:textStyle="bold"/>
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tv_stok"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/seciniz"
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginRight="6dp"
+                    android:drawableRight="@drawable/ic_arrow_drop_down_black_24dp"
+                    android:drawableTint="@android:color/tab_indicator_text"/>
+
+            </LinearLayout>
+
+
+
 
         </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@android:color/darker_gray"/>
+
+        <!-- Başlık -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/icindekiler"
+            android:textColor="@color/gri700"
+            android:textStyle="bold"
+            android:padding="12dp"
+            android:background="@color/baslik_bg"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@android:color/darker_gray"/>
+
+        //Chips View
+        <com.wefika.flowlayout.FlowLayout
+            android:id="@+id/flow_layout"
+            android:layout_width = "match_parent"
+            android:layout_height = "wrap_content"
+            android:gravity = "start|top"
+            android:padding="6dp"></com.wefika.flowlayout.FlowLayout>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:layout_alignParentLeft="true">
+
+
+            <RelativeLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:layout_below="@+id/view_sperator"
+                android:visibility="visible"
+                android:padding="3dp">
+
+                <EditText
+                    android:id="@+id/et_chip_ekle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@+id/btn_chip_ekle"
+                    android:maxLines="1"
+                    android:maxLength="50"
+                    android:hint="@string/giriniz"/>
+
+                <android.support.v7.widget.AppCompatButton
+                    android:id="@+id/btn_chip_ekle"
+                    android:textColor="@color/beyaz"
+                    app:backgroundTint="@color/yesil400"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/ic_add_white_18dp"
+                    android:drawableTint="@color/beyaz"
+                    android:text="@string/ekle"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"/>
+
+            </RelativeLayout>
 
 
         </android.support.v7.widget.CardView>
 
 
-    <android.support.v7.widget.AppCompatButton
-        android:id="@+id/btn_yemek_ekle"
-        android:textColor="@color/beyaz"
-        app:backgroundTint="@color/yesil400"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:drawableTint="@color/beyaz"
-        android:text="@string/yemek_ekle"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"/>
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_yemek_ekle"
+            android:textColor="@color/beyaz"
+            app:backgroundTint="@color/yesil400"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableTint="@color/beyaz"
+            android:text="@string/yemek_ekle"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"/>
 
 
-</LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>
+

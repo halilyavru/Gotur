@@ -65,13 +65,9 @@ public class GirisActivity extends AppCompatActivity {
         toolbar.setTitle(R.string.app_name);
         setSupportActionBar(toolbar);
 
-        if (getSupportActionBar() != null){
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
-        }
-
     }
 
+    //Fragmentleri yönettiğimiz method
     public void fragmentDegistir(int fragmentSecim){
         hangiSayfa = fragmentSecim;
         Bundle bundle;
@@ -95,7 +91,7 @@ public class GirisActivity extends AppCompatActivity {
 
     }
 
-
+    //Kullanıcı Adı ve Haritadan konum seçildikten sonra firebaseye login oluyoruz.
     public void giris(final String kullaniciAdi, final String konum){
         kullanici = new Kullanici();
         kullanici.setAdi(kullaniciAdi);
@@ -126,6 +122,7 @@ public class GirisActivity extends AppCompatActivity {
                 });
     }
 
+
     private void updateUI(FirebaseUser user){
         boolean isSignedIn = (user != null);
         System.out.println("Giriş : "+isSignedIn);
@@ -151,31 +148,37 @@ public class GirisActivity extends AppCompatActivity {
 
     private void firebaseIslemleri(FirebaseUser firebaseUser){
 
-
-
         databaseReference = FirebaseDatabase.getInstance().getReference().child("Kullanıcılar").child(firebaseUser.getUid());
 
         valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                System.out.println("dataSnapshot: "+dataSnapshot.toString()+dataSnapshot.getValue());
 
+                //Kullanıcı yoksa kullanıcıyı ekliyoruz
                 if(dataSnapshot.getValue() == null){
                     Map<String,String> mapKullanici =  new HashMap<>();
                     mapKullanici.put("adi",kullanici.getAdi());
                     mapKullanici.put("konum",kullanici.getKonum());
                     databaseReference.setValue(mapKullanici);
-                }else{
+
+                }else{//Kullanıcı varsa bilgilerini aldıktan sonra ana sayfaya yonlendiriyoruz
                     kullanici.setAdi(dataSnapshot.child("adi").getValue().toString());
                     kullanici.setKonum(dataSnapshot.child("konum").getValue().toString());
                     if(dataSnapshot.child("yemekler").getValue() != null){
                         String [] arrayYemekler = dataSnapshot.child("yemekler").getValue().toString().split(",");
                         kullanici.setListYemeklerim(Arrays.asList(arrayYemekler));
                     }
+                    if(dataSnapshot.child("resimUrl").getValue() != null){
+                        kullanici.setResimUrl(dataSnapshot.child("resimUrl").getValue().toString());
+                    }
+                    if(dataSnapshot.child("maxYemekGoturmeMesafesi").getValue() != null){
+                        kullanici.setMaxYemekGoturmeMesafesi(Integer.parseInt(dataSnapshot.child("maxYemekGoturmeMesafesi").getValue().toString()));
+                    }
+
 
                     databaseReference.removeEventListener(valueEventListener);
                     Intent intent =  new Intent(GirisActivity.this,MainActivity.class);
-                    intent.putExtra("kullanıcı",kullanici);
+                    intent.putExtra("kullanici",kullanici);
                     startActivity(intent);
                     finish();
                 }

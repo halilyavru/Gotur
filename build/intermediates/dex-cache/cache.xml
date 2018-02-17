@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="false"
+        jar="/Users/halilmac/.android/build-cache/ac6571270e8bfb8714183e6958bd2d6e6ae9d1de/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.1"
+        sha1="dbbba1fc0f6c51382c3fa1f9223d1f6f9144f359">
+        <dex dex="/Users/halilmac/AndroidStudioProjects/Gotur/app/build/intermediates/pre-dexed/debug/classes_93756b6dfc74c145ba65e6f646b94e0092100ecb.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/halilmac/.android/build-cache/02848bd31c3742ed9335248f861bce9c6e53d746/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="26.0.1"
+        sha1="86e2c2399cfd7f8271b535b0e7d8ec092d0c6335">
+        <dex dex="/Users/halilmac/AndroidStudioProjects/Gotur/app/build/intermediates/pre-dexed/debug/classes_de6fffbf977c8479aead8cdf9bba38f7b0b0bdb9.jar" />
+    </item>
+
+</items>
