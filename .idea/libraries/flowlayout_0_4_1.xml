@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="flowlayout-0.4.1">
+    <CLASSES>
+      <root url="file://$USER_HOME$/.android/build-cache/76fa75b6746c3c45b436fb553c24987df9a6630f/output/res" />
+      <root url="jar://$USER_HOME$/.android/build-cache/76fa75b6746c3c45b436fb553c24987df9a6630f/output/jars/classes.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.wefika/flowlayout/0.4.1/fbfbaee6e41cd447fff8260ca66ed97fb49ddde6/flowlayout-0.4.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

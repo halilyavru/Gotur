@@ -5,4 +5,11 @@
     <dimen name="nav_header_vertical_spacing">16dp</dimen>
     <dimen name="nav_header_height">160dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+
+    <!-- chip -->
+    <dimen name="chip_padding">12dp</dimen>
+    <dimen name="deletable_chip_padding">12dp</dimen>
+    <dimen name="padding_top">8dp</dimen>
+    <dimen name="remove_icon_dimen">24dp</dimen>
+    <dimen name="remove_icon_margin">4dp</dimen>
 </resources>
