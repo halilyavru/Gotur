@@ -25,6 +25,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.getirgotur.Giris.GirisActivity;
+import com.getirgotur.Servisler.SiparisCanliTakipServis;
 import com.getirgotur.YemekEkle.YemekEkleActivity;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -90,6 +91,8 @@ public class MainActivity extends AppCompatActivity
         }
         TextView tvKullaniciAdi = (TextView)hView.findViewById(R.id.tv_kullanici_adi);
         tvKullaniciAdi.setText(kullanici.getAdi());
+
+        startService(new Intent(this, SiparisCanliTakipServis.class));
     }
 
     @Override

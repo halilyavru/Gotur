@@ -266,6 +266,9 @@ public class YemekEkleActivity extends AppCompatActivity implements View.OnClick
         findViewById(R.id.btn_yemek_ekle).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(YemekEkleActivity.this);
+                builder.setTitle(R.string.uyari);
+
                 String mesaj = "";
                 if(filePath == null){
                     mesaj = "Resim Seçiniz";
@@ -311,6 +314,17 @@ public class YemekEkleActivity extends AppCompatActivity implements View.OnClick
                         }
                     });
 
+                }
+
+                if (mesaj.trim().length() != 0) {
+                    builder.setMessage(mesaj);
+                    builder.setNegativeButton(R.string.tamam, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                        }
+                    });
+                    builder.create().show();
                 }
                /* portfoy.setSatisFiyati(inputFiyat.getText().toString().trim().replace(".", ""));
                 portfoy.setSatisFiyatBirimi(sp.getSelectedItem().toString());
@@ -373,6 +387,7 @@ public class YemekEkleActivity extends AppCompatActivity implements View.OnClick
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             progressDialog.dismiss();
                             Toast.makeText(YemekEkleActivity.this, "Resim Yüklendi.", Toast.LENGTH_SHORT).show();
+                            finish();
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
