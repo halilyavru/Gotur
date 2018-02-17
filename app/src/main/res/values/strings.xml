@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Gotur</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="urun_bilgileri">Ürün Bilgileri</string>
+    <string name="resim_ekle">Resim Ekle</string>
+    <string name="yemek_adi">Yemek Adı</string>
+    <string name="seciniz">Seçiniz</string>
+    <string name="giriniz">Giriniz</string>
+</resources>

@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "848832708001",
+    "firebase_url": "https://gotur-dba39.firebaseio.com",
+    "project_id": "gotur-dba39",
+    "storage_bucket": "gotur-dba39.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:848832708001:android:54cddf51abaa9417",
+        "android_client_info": {
+          "package_name": "com.getirgotur"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "848832708001-4ue63vvttaqe2ka6daddnofjddmg0a79.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.getirgotur",
+            "certificate_hash": "b9694a153d0143fb99ddec5377b78ed8827d38ba"
+          }
+        },
+        {
+          "client_id": "848832708001-j9h7tdmjdgm4dja1s929hcro9kis5bn5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAaVA19CxJZ41fEdkoYxln2u4RWyP5_PjY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "848832708001-j9h7tdmjdgm4dja1s929hcro9kis5bn5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
