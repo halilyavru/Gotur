@@ -1,6 +1,7 @@
 package com.getirgotur.Giris;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 import com.getirgotur.MainActivity;
 import com.getirgotur.R;
 import com.getirgotur.Kullanici;
+import com.getirgotur.Servisler.SiparisCanliTakipServis;
 import com.getirgotur.Yemek;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -130,6 +132,12 @@ public class GirisActivity extends AppCompatActivity {
             if(kullanici == null){
                 kullanici =  new Kullanici();
             }
+
+            SharedPreferences preferences = getSharedPreferences("Bilgilerim",
+                    MODE_PRIVATE);
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putString("kullaniciId",user.getUid()); //string değer ekleniyor
+            editor.commit(); //Kayıt
 
             kullanici.setId(user.getUid());
 

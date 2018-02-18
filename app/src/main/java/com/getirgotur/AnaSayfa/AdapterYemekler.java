@@ -61,7 +61,7 @@ public class AdapterYemekler extends RecyclerView.Adapter<AdapterYemekler.YemekV
         holder.tvYemekAdi.setText(yemek.getAdi());
         holder.tvPuan.setText(""+yemek.getPuan());
         holder.tvKullaniciAdi.setText(yemek.getSahipAdi());
-        holder.tvMesafe.setText(String.valueOf(mesafeler.get(yemek.getSahipId()))+ "KM");
+        holder.tvMesafe.setText( mesafeler.get(yemek.getSahipId())<=1000 ? (mesafeler.get(yemek.getSahipId())+ "m") : (mesafeler.get(yemek.getSahipId())/1000)+ "KM");
 
         Picasso.with(mContext).load(yemek.getResimUrl())
                 .memoryPolicy (MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)

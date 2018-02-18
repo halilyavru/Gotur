@@ -6,13 +6,17 @@ package com.getirgotur.Servisler;
 
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.PixelFormat;
+import android.location.Location;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -21,21 +25,35 @@ import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.getirgotur.R;
+import com.getirgotur.Siparisler.AdapterSiparisler;
+import com.getirgotur.Siparisler.Siparis;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class SiparisCanliTakipServis extends Service {
-    RecyclerView.LayoutManager siraliDekarasyon;
+
+    private List<Siparis> listSiparisler =new ArrayList<>();
+    SharedPreferences sharedPref;
     RecyclerView rcCanliSiparisler;
     private WindowManager mWindowManager;
     private View mFloatingView;
     int height;
-    CanliSiparisAdapter canliSiparisAdapter;
     int merkez;
     TextView tvKucultBuyut;
     TextView tvSistemiKapat,tvTumunuGoster;
     WindowManager.LayoutParams params;
     boolean kucuk = false;
-    @Nullable
+    private DatabaseReference databaseReference;
+    private AdapterSiparisler adapter;
+
+
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -46,6 +64,8 @@ public class SiparisCanliTakipServis extends Service {
     public void onCreate() {
 
 
+        SharedPreferences preferences = getSharedPreferences("Bilgilerim",
+                MODE_PRIVATE);
         //Canlı Olarak siparişlerin listelendiği görüntünün tüm görüntülerin üzerinde olması için windowmanagerin içine ekleyeceğiz
         mWindowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
 
@@ -93,18 +113,43 @@ public class SiparisCanliTakipServis extends Service {
             }
         });
 
+
         //oluşturduğumuz görüntüyü ekledik
         mWindowManager.addView(mFloatingView, params);
 
 
         //siparişlerin tek sıra ile goüntülenmesini sağlar
-        siraliDekarasyon = new GridLayoutManager(SiparisCanliTakipServis.this, 1);
-
-        rcCanliSiparisler.setLayoutManager(siraliDekarasyon);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
+        rcCanliSiparisler.setLayoutManager(mLayoutManager);
         rcCanliSiparisler.setItemAnimator(new DefaultItemAnimator());
 
-        canliSiparisAdapter = new CanliSiparisAdapter(rcCanliSiparisler,this);
-        rcCanliSiparisler.setAdapter(canliSiparisAdapter);
+
+
+        adapter = new AdapterSiparisler(getBaseContext(), listSiparisler , true, null);
+        rcCanliSiparisler.setAdapter(adapter);
+
+
+        Toast.makeText(this, "kullanici :"+preferences.getString("kullaniciId",""), Toast.LENGTH_SHORT).show();
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("Satilanlar").child(preferences.getString("kullaniciId",""));
+
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                listSiparisler.clear();
+
+                for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
+
+                    Siparis siparis = snapshot.getValue(Siparis.class);
+                    listSiparisler.add(siparis);
+                }
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
 
 
@@ -122,6 +167,7 @@ public class SiparisCanliTakipServis extends Service {
 
 
         mFloatingView.findViewById(R.id.tasiyici).setOnTouchListener(new View.OnTouchListener() {
+
             private int dokunmaBaslangicX;
             private int dokunmaBaslangicY;
             private float objeDokunulanNoktaX;
@@ -168,9 +214,17 @@ public class SiparisCanliTakipServis extends Service {
 
                         //kaydırmanın gerçekleşmesi için görünümünü güncelledim
                         mWindowManager.updateViewLayout(mFloatingView, params);
+                        return true;
 
+                    case MotionEvent.ACTION_UP:
 
-
+                        if (tiklandiMi(dokunmaBaslangicX,params.x,dokunmaBaslangicY,params.y)){
+                            if (mFloatingView.findViewById(R.id.rlRcyler).getVisibility()==View.VISIBLE){
+                                mFloatingView.findViewById(R.id.rlRcyler).setVisibility(View.GONE);
+                                return true;
+                            }
+                            mFloatingView.findViewById(R.id.rlRcyler).setVisibility(View.VISIBLE);
+                        }
                         return true;
                 }
                 return false;
@@ -178,16 +232,23 @@ public class SiparisCanliTakipServis extends Service {
         });
     }
 
+    //
+    private boolean tiklandiMi(float baslangicX, float bitisX, float baslangicY, float bitisY) {
+        float farkX = Math.abs(baslangicX - bitisX);
+        float farkY = Math.abs(baslangicY - bitisY);
+        return !(farkX > 200 || farkY > 200);
+    }
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         // Let it continue running until it is stopped.
-        Toast.makeText(this, "Service Started", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "Servis Başladı", Toast.LENGTH_LONG).show();
         return START_STICKY;
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Toast.makeText(this, "Service Destroyed", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "Servis Sonlandırıldı", Toast.LENGTH_LONG).show();
     }
 }

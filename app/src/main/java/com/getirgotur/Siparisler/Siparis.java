@@ -20,6 +20,7 @@ public class Siparis implements Serializable {
     private String aliciId;
     private String aliciAdi;
     private String aliciKonum;
+    private String saticiKonum;
     private int siparisMiktari;
     private boolean teslimatDurumu;
     private boolean siparisKabul;
@@ -155,5 +156,13 @@ public class Siparis implements Serializable {
 
     public void setSiparisMesaj(String siparisMesaj) {
         this.siparisMesaj = siparisMesaj;
+    }
+
+    public String getSaticiKonum() {
+        return saticiKonum;
+    }
+
+    public void setSaticiKonum(String saticiKonum) {
+        this.saticiKonum = saticiKonum;
     }
 }

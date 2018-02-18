@@ -1,5 +1,6 @@
 package com.getirgotur.Siparisler;
 
+import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -24,6 +25,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -38,6 +40,7 @@ public class SiparislerFragment extends Fragment {
     private AdapterSiparisler adapter;
     private RecyclerView recyclerView;
     private String islem;
+    private HashMap<String,Integer> mesafeler =  new HashMap<>();
 
     @Nullable
     @Override
@@ -50,7 +53,7 @@ public class SiparislerFragment extends Fragment {
             islem = getArguments().getString("islem");
         }
         listSiparisler = new ArrayList<>();
-        adapter = new AdapterSiparisler(getActivity(), listSiparisler , islem.equals("Satilanlar") ? true : false);
+        adapter = new AdapterSiparisler(getActivity(), listSiparisler , islem.equals("Satilanlar") ? true : false, mesafeler);
 
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
@@ -64,14 +67,25 @@ public class SiparislerFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 listSiparisler.clear();
-
+                String [] konum2 =  kullanici.getKonum().split(",");
                 for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
-                    System.out.println("islem "+snapshot);
+
                     Siparis siparis = snapshot.getValue(Siparis.class);
+                    String [] konum1 = islem.equals("Satilanlar") ?  siparis.getAliciKonum().split(",") : siparis.getSaticiKonum().split(",");
+
+                    float [] mesafe = new float[1];
+                    Location.distanceBetween(Double.parseDouble(konum1[0]),Double.parseDouble(konum1[1]),
+                            Double.parseDouble(konum2[0]), Double.parseDouble(konum2[1]),mesafe);
+                    if( islem.equals("Satilanlar") ? true : false){
+                        mesafeler.put(siparis.getAliciId(),(int)mesafe[0]);
+                    }else{
+                        mesafeler.put(siparis.getSahipId(),(int)mesafe[0]);
+                    }
+
                     listSiparisler.add(siparis);
                 }
 
-                System.out.println("Siparis : "+listSiparisler.size());
+
                 adapter.notifyDataSetChanged();
             }
 

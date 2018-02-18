@@ -111,6 +111,9 @@ public class MainActivity extends AppCompatActivity
                 .replace(R.id.container,fragment)
                 .commit();
 
+
+
+        startService(new Intent(this, SiparisCanliTakipServis.class));
         //startService(new Intent(this, SiparisCanliTakipServis.class));
     }
 

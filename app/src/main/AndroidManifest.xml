@@ -19,7 +19,7 @@
         android:hardwareAccelerated="false">
         <activity
             android:name=".Giris.GirisActivity"
-            android:label="@string/giris"
+            android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -30,7 +30,7 @@
 
         <activity
             android:name=".MainActivity"
-            android:label="@string/yemek_ekle"
+            android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
 

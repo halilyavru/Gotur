@@ -4,16 +4,17 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="6dp">
+    android:padding="6dp"
+    android:background="@color/beyaz">
 
 
     <ImageView
         android:id="@+id/iv_yemek_resim"
         android:layout_width="72dp"
         android:layout_height="72dp"
-        android:background="?attr/selectableItemBackgroundBorderless"
         android:clickable="true"
-        android:scaleType="centerCrop"/>
+        android:scaleType="centerCrop"
+        android:layout_marginRight="3dp" />
 
     <TextView
         android:id="@+id/tv_yemek_adi"
@@ -22,8 +23,7 @@
         android:layout_alignParentTop="true"
         android:layout_toEndOf="@+id/iv_yemek_resim"
         android:layout_toRightOf="@+id/iv_yemek_resim"
-        android:text="TextView"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
+        android:text=""/>
 
     <TextView
         android:id="@+id/tv_tutar"
@@ -32,8 +32,16 @@
         android:layout_below="@+id/tv_yemek_adi"
         android:layout_toEndOf="@+id/iv_yemek_resim"
         android:layout_toRightOf="@+id/iv_yemek_resim"
-        android:text="TextView"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
+        android:text=""/>
+
+    <TextView
+        android:id="@+id/tv_mesaj"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_tutar"
+        android:layout_toEndOf="@+id/iv_yemek_resim"
+        android:layout_toRightOf="@+id/iv_yemek_resim"
+        android:text=""/>
 
     <TextView
         android:id="@+id/tv_mesafe"
@@ -54,16 +62,14 @@
         android:layout_alignRight="@+id/iv_yemek_resim"
         android:text="10x"
         android:layout_margin="6dp"
-        android:textColor="@color/sari800"/>
+        android:textColor="@color/sari800"
+        android:background="#66000000"/>
 
 
-    <android.support.v7.widget.AppCompatButton
+    <Button
         android:id="@+id/btn_onayla"
-        android:textColor="@color/beyaz"
-        app:backgroundTint="@color/yesil400"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:drawableTint="@color/beyaz"
         android:text="@string/onayla"
         android:layout_alignBottom="@+id/iv_yemek_resim"
         android:layout_alignParentRight="true"

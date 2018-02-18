@@ -112,7 +112,7 @@ public class CanliSiparisAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
 
         if (TYPE_HEADER == viewType) {
-            itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_siparis_aktif, parent, false);
+            itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_siparisler, parent, false);
             return new SiparisAktif(itemView);
         }else{
             itemView = LayoutInflater.from(parent.getContext())

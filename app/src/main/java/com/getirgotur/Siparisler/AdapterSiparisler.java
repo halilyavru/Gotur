@@ -22,6 +22,7 @@ import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.text.DecimalFormat;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -33,11 +34,11 @@ public class AdapterSiparisler extends RecyclerView.Adapter<AdapterSiparisler.Si
     private Context mContext;
     private List<Siparis> listSiparis;
     private DatabaseReference databaseReference;
-    private ValueEventListener valueEventListener;
     private boolean satici = false;
+    private HashMap<String,Integer> mesafeler;
 
     public class SiparislerViewHolder extends RecyclerView.ViewHolder {
-        public TextView tvYemekAdi, tvStok, tvTutar, tvMesafe, tvSiparisDurumu;
+        public TextView tvYemekAdi, tvStok, tvTutar, tvMesafe, tvSiparisDurumu, tvMesaj;
         public ImageView ivYemek;
         public Button btnOnayla;
 
@@ -51,6 +52,7 @@ public class AdapterSiparisler extends RecyclerView.Adapter<AdapterSiparisler.Si
             tvMesafe = (TextView) view.findViewById(R.id.tv_mesafe);
             btnOnayla = (Button) view.findViewById(R.id.btn_onayla);
             tvSiparisDurumu =(TextView) view.findViewById(R.id.siparis_durumu);
+            tvMesaj =(TextView) view.findViewById(R.id.tv_mesaj);
 
             if(!satici){
                 btnOnayla.setText("Teslimat Onayla");
@@ -60,19 +62,18 @@ public class AdapterSiparisler extends RecyclerView.Adapter<AdapterSiparisler.Si
     }
 
 
-    public AdapterSiparisler(Context mContext, List<Siparis> listSiparis,boolean satici) {
+    public AdapterSiparisler(Context mContext, List<Siparis> listSiparis,boolean satici, HashMap<String,Integer> mesafeler) {
+
         this.mContext = mContext;
         this.listSiparis = listSiparis;
         this.satici = satici;
-
-
-
+        this.mesafeler = mesafeler;
 
     }
 
     @Override
     public AdapterSiparisler.SiparislerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()) .inflate(R.layout.item_siparisler, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_siparisler, parent, false);
 
         return new AdapterSiparisler.SiparislerViewHolder(itemView);
     }
@@ -84,7 +85,7 @@ public class AdapterSiparisler extends RecyclerView.Adapter<AdapterSiparisler.Si
 
         Double tutar = Double.parseDouble(siparis.getYemekFiyati())*siparis.getSiparisMiktari();
         holder.tvTutar.setText(String.valueOf(tutar));
-        holder.tvMesafe.setText("525m");
+        holder.tvMesaj.setText(siparis.getSiparisMesaj() != null ? siparis.getSiparisMesaj() : "");
 
         Picasso.with(mContext).load(siparis.getResimUrl())
                 .memoryPolicy (MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
@@ -93,6 +94,11 @@ public class AdapterSiparisler extends RecyclerView.Adapter<AdapterSiparisler.Si
 
 
         if(satici){
+            if(mesafeler != null){
+                holder.tvMesafe.setText( mesafeler.get(siparis.getAliciId())<=1000 ? (mesafeler.get(siparis.getAliciId())+ "m") : (mesafeler.get(siparis.getAliciId())/1000)+ "KM");
+
+            }
+
             if(siparis.isSiparisKabul()){
                 holder.btnOnayla.setVisibility(View.GONE);
                 holder.tvSiparisDurumu.setVisibility(View.VISIBLE);
@@ -105,6 +111,7 @@ public class AdapterSiparisler extends RecyclerView.Adapter<AdapterSiparisler.Si
 
 
             }else{
+
                 holder.btnOnayla.setVisibility(View.VISIBLE);
                 holder.tvSiparisDurumu.setVisibility(View.GONE);
                 holder.btnOnayla.setOnClickListener(new View.OnClickListener() {
@@ -122,13 +129,16 @@ public class AdapterSiparisler extends RecyclerView.Adapter<AdapterSiparisler.Si
             }
 
         }else{
+            if(mesafeler != null) {
+                holder.tvMesafe.setText(mesafeler.get(siparis.getSahipId()) <= 1000 ? (mesafeler.get(siparis.getSahipId()) + "m") : (mesafeler.get(siparis.getSahipId()) / 1000) + "KM");
 
+            }
             if(siparis.isSiparisKabul()){
 
                 if(siparis.isTeslimatDurumu()){
                     holder.btnOnayla.setVisibility(View.GONE);
                     holder.tvSiparisDurumu.setVisibility(View.VISIBLE);
-                    holder.tvSiparisDurumu.setText("Teslim Edikdi.");
+                    holder.tvSiparisDurumu.setText("Teslim Edildi.");
                 }else{
                     holder.btnOnayla.setVisibility(View.VISIBLE);
                     holder.tvSiparisDurumu.setVisibility(View.GONE);

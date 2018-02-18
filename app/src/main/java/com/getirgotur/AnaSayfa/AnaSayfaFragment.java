@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -26,21 +27,27 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.getirgotur.Kullanici;
 import com.getirgotur.R;
 import com.getirgotur.Siparisler.Siparis;
 import com.getirgotur.Yemek;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -76,19 +83,35 @@ public class AnaSayfaFragment extends Fragment implements OnMapReadyCallback, Lo
     private DatabaseReference databaseReference;
     private Kullanici kullanici;
     private HashMap<String,Integer> mesafeler =  new HashMap<>();
+    private List<BitmapDescriptor> iconList = new ArrayList<BitmapDescriptor>();
+    private BitmapDescriptor benimKonumum;
+    private Polyline polyline;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main,container,false);
 
-
                 if(getArguments().getSerializable("kullanici") != null){
                     kullanici = (Kullanici) getArguments().getSerializable("kullanici");
                 }
 
+        iconList.add(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
+        iconList.add(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+        iconList.add(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN));
+        iconList.add(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+        iconList.add(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
+        iconList.add(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
+        iconList.add(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE));
+        iconList.add(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET));
+        iconList.add(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
+
+
+        benimKonumum = BitmapDescriptorFactory.fromResource(R.drawable.my_location);
 
         mLocationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+
+
 
         if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -150,24 +173,16 @@ public class AnaSayfaFragment extends Fragment implements OnMapReadyCallback, Lo
                         float [] mesafe = new float[1];
                                 Location.distanceBetween(Double.parseDouble(konum1[0]),Double.parseDouble(konum1[1]),
                                 Double.parseDouble(konum2[0]), Double.parseDouble(konum2[1]),mesafe);
-                        System.out.println("Mesafe: "+mesafe[0]);
-                        mesafeler.put(yemek.getSahipId(),(int)mesafe[0]/1000);
+
+
+                        mesafeler.put(yemek.getSahipId(),(int)mesafe[0]);
                         if(yemek.getStok()>0 && !yemek.getSahipId().equals(kullanici.getId())){
                             listYemek.add(yemek);
-                        }
-                        for (String key :
-                                mesafeler.keySet()) {
-                            System.out.println("key: "+key+", value: "+mesafeler.get(key));
-
                         }
 
                     }
                 }
-
-
-                for (String key:mesafeler.keySet()) {
-                    //System.out.println("Mesafe "+key+" --  "+));
-                }
+                addMarker();
                 adapter.notifyDataSetChanged();
             }
 
@@ -178,6 +193,22 @@ public class AnaSayfaFragment extends Fragment implements OnMapReadyCallback, Lo
         });
 
         return view;
+    }
+
+    private void addMarker(){
+
+        for (int i = 0; i < listYemek.size(); i++) {
+            String [] locat = listYemek.get(i).getSahipKonum().split(",");
+
+            Marker mrkr = mMap.addMarker(new MarkerOptions()
+                    .position(new LatLng(Double.parseDouble(locat[0]), Double.parseDouble(locat[1])))
+                    .title(listYemek.get(i).getAdi())
+                    .snippet(listYemek.get(i).getSahipAdi())
+                    .icon(iconList.get(i%iconList.size())));
+
+            mrkr.showInfoWindow();
+        }
+
     }
 
     public interface ClickListener {
@@ -274,6 +305,7 @@ public class AnaSayfaFragment extends Fragment implements OnMapReadyCallback, Lo
                 databaseReference = FirebaseDatabase.getInstance().getReference().child("Alilanlar").child(kullanici.getId()).push();
                 String id = databaseReference.getKey();
                 siparis.setYemekId(yemek.getId());
+                siparis.setSaticiKonum(yemek.getSahipKonum());
                 siparis.setSahipId(yemek.getSahipId());
                 siparis.setResimUrl(yemek.getResimUrl());
                 siparis.setYemekAdi(yemek.getAdi());
@@ -286,6 +318,8 @@ public class AnaSayfaFragment extends Fragment implements OnMapReadyCallback, Lo
 
                 databaseReference = FirebaseDatabase.getInstance().getReference().child("Satilanlar").child(yemek.getSahipId()).child(id);
                 databaseReference.setValue(siparis);
+
+                Toast.makeText(getActivity(), "Siparişiniz Alıcıya Ulaşmıştır.", Toast.LENGTH_SHORT).show();
 
 
             }
@@ -334,6 +368,18 @@ public class AnaSayfaFragment extends Fragment implements OnMapReadyCallback, Lo
 
     @Override
     public boolean onMarkerClick(Marker marker) {
+
+        if(!marker.equals(this.marker)){
+            if(polyline != null){
+                polyline.remove();
+            }
+            List<LatLng> listLatLong = new ArrayList<>();
+            listLatLong.add(new LatLng(currentLat,currentLon));
+            listLatLong.add(marker.getPosition());
+            drawRouteOnMap(mMap,listLatLong);
+        }
+
+
         return false;
     }
 
@@ -342,49 +388,65 @@ public class AnaSayfaFragment extends Fragment implements OnMapReadyCallback, Lo
         mMap = googleMap;
         mMap.setOnMarkerClickListener(AnaSayfaFragment.this);
 
+        String [] arrayKonumum = kullanici.getKonum().split(",");
+        currentLat = Double.parseDouble(arrayKonumum[0]);
+        currentLon =  Double.parseDouble(arrayKonumum[1]);
+
         googleMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
             @Override
             public void onMapLoaded() {
 
-                if(currentLat == 0 && currentLon == 0){
-                    LatLngBounds TURKIYE = new LatLngBounds(
-                            new LatLng(36, 26), new LatLng(42, 45));
 
-                    // Set the camera to the greatest possible zoom level that includes the
-                    // bounds
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(TURKIYE, 10));
-                }
 
 
 
             }
         });
+
+        if(currentLat != 0 || currentLon != 0){
+            CameraUpdate center=
+                    CameraUpdateFactory.newLatLng(new LatLng(currentLat,
+                            currentLon));
+            CameraUpdate zoom=CameraUpdateFactory.zoomTo(16);
+
+            mMap.moveCamera(center);
+            mMap.animateCamera(zoom);
+        }
+
+
+        if(marker !=null){
+            marker.remove();
+        }
+        marker = mMap.addMarker(new MarkerOptions()
+                .position(new LatLng(currentLat, currentLon))
+                .title(kullanici.getAdi())
+                .snippet(null)
+                .icon(benimKonumum)
+        );
+
+        marker.showInfoWindow();
 
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
 
             @Override
             public void onMapClick(LatLng latlng) {
                 // TODO Auto-generated method stub
-                System.out.println("setOnMapClickListener : "+latlng.toString());
-                currentLat = latlng.latitude;
-                currentLon = latlng.longitude;
-                if(marker !=null){
-                    marker.remove();
-                }
-                marker = mMap.addMarker(new MarkerOptions()
-                        .position(new LatLng(currentLat, currentLon))
-                        .title("Bu Nokta Konumunuz Olarak Belirlendi")
-                        .snippet(null)
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
-                );
 
-                marker.showInfoWindow();
 
             }
         });
 
     }
 
-
+    private void drawRouteOnMap(GoogleMap map, List<LatLng> positions){
+        PolylineOptions options = new PolylineOptions().width(5).color(Color.BLUE).geodesic(true);
+        options.addAll(positions);
+        polyline = map.addPolyline(options);
+        CameraPosition cameraPosition = new CameraPosition.Builder()
+                .target(new LatLng(positions.get(1).latitude, positions.get(1).longitude))
+                .zoom(17)
+                .build();
+        map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+    }
 
 }
