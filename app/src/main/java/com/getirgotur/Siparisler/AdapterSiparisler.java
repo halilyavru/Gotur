@@ -48,6 +48,10 @@ public class AdapterSiparisler extends RecyclerView.Adapter<AdapterSiparisler.Si
             tvMesafe = (TextView) view.findViewById(R.id.tv_mesafe);
             btnOnayla = (Button) view.findViewById(R.id.btn_onayla);
             tvSiparisDurumu =(TextView) view.findViewById(R.id.siparis_durumu);
+
+            if(!satici){
+                btnOnayla.setText("Teslimat Onayla");
+            }
         }
 
     }
@@ -87,10 +91,19 @@ public class AdapterSiparisler extends RecyclerView.Adapter<AdapterSiparisler.Si
 
         if(satici){
             if(siparis.isSiparisKabul()){
-                holder.tvSiparisDurumu.setVisibility(View.VISIBLE);
-                holder.tvSiparisDurumu.setText("Teslimat Aşamasında.");
                 holder.btnOnayla.setVisibility(View.GONE);
+                holder.tvSiparisDurumu.setVisibility(View.VISIBLE);
+                if(siparis.isTeslimatDurumu()){
+                    holder.tvSiparisDurumu.setText("Teslim Edildi.");
+                }else{
+                    holder.tvSiparisDurumu.setText("Teslimat Aşamasında.");
+                }
+
+
+
             }else{
+                holder.btnOnayla.setVisibility(View.VISIBLE);
+                holder.tvSiparisDurumu.setVisibility(View.GONE);
                 holder.btnOnayla.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -102,13 +115,38 @@ public class AdapterSiparisler extends RecyclerView.Adapter<AdapterSiparisler.Si
 
                     }
                 });
-                holder.tvSiparisDurumu.setVisibility(View.GONE);
+
             }
 
         }else{
             holder.tvSiparisDurumu.setVisibility(View.VISIBLE);
             holder.btnOnayla.setVisibility(View.GONE);
             holder.tvSiparisDurumu.setText(siparis.isSiparisKabul() ? "Sipariş Onaylandı" : "Sipariş Bekliyor");
+            if(siparis.isSiparisKabul()){
+
+                if(){
+                    
+                }
+
+                holder.btnOnayla.setVisibility(View.VISIBLE);
+                holder.tvSiparisDurumu.setVisibility(View.GONE);
+                holder.btnOnayla.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        databaseReference = FirebaseDatabase.getInstance().getReference().child("Satilanlar");
+                        databaseReference.child(siparis.getSahipId()).child(siparis.getId()).child("teslimatDurumu").setValue(true);
+                        databaseReference = FirebaseDatabase.getInstance().getReference().child("Alilanlar");
+                        databaseReference.child(siparis.getAliciId()).child(siparis.getId()).child("teslimatDurumu").setValue(true);
+
+                    }
+                });
+
+            }else{
+
+
+            }
+
+
         }
 
 
