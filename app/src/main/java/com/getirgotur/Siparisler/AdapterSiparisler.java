@@ -119,30 +119,35 @@ public class AdapterSiparisler extends RecyclerView.Adapter<AdapterSiparisler.Si
             }
 
         }else{
-            holder.tvSiparisDurumu.setVisibility(View.VISIBLE);
-            holder.btnOnayla.setVisibility(View.GONE);
-            holder.tvSiparisDurumu.setText(siparis.isSiparisKabul() ? "Sipariş Onaylandı" : "Sipariş Bekliyor");
+
             if(siparis.isSiparisKabul()){
 
-                if(){
-                    
+                if(siparis.isTeslimatDurumu()){
+                    holder.btnOnayla.setVisibility(View.GONE);
+                    holder.tvSiparisDurumu.setVisibility(View.VISIBLE);
+                    holder.tvSiparisDurumu.setText("Teslim Edikdi.");
+                }else{
+                    holder.btnOnayla.setVisibility(View.VISIBLE);
+                    holder.tvSiparisDurumu.setVisibility(View.GONE);
+                    holder.btnOnayla.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            databaseReference = FirebaseDatabase.getInstance().getReference().child("Satilanlar");
+                            databaseReference.child(siparis.getSahipId()).child(siparis.getId()).child("teslimatDurumu").setValue(true);
+                            databaseReference = FirebaseDatabase.getInstance().getReference().child("Alilanlar");
+                            databaseReference.child(siparis.getAliciId()).child(siparis.getId()).child("teslimatDurumu").setValue(true);
+
+                        }
+                    });
                 }
 
-                holder.btnOnayla.setVisibility(View.VISIBLE);
-                holder.tvSiparisDurumu.setVisibility(View.GONE);
-                holder.btnOnayla.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        databaseReference = FirebaseDatabase.getInstance().getReference().child("Satilanlar");
-                        databaseReference.child(siparis.getSahipId()).child(siparis.getId()).child("teslimatDurumu").setValue(true);
-                        databaseReference = FirebaseDatabase.getInstance().getReference().child("Alilanlar");
-                        databaseReference.child(siparis.getAliciId()).child(siparis.getId()).child("teslimatDurumu").setValue(true);
 
-                    }
-                });
 
             }else{
 
+                holder.tvSiparisDurumu.setVisibility(View.VISIBLE);
+                holder.btnOnayla.setVisibility(View.GONE);
+                holder.tvSiparisDurumu.setText("Sipariş Onay Bekliyor.");
 
             }
 
