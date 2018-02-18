@@ -13,6 +13,7 @@ import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -23,9 +24,10 @@ public class AdapterYemekler extends RecyclerView.Adapter<AdapterYemekler.YemekV
 
     private Context mContext;
     private List<Yemek> listYemek;
+    private HashMap<String,Integer> mesafeler;
 
     public class YemekViewHolder extends RecyclerView.ViewHolder {
-        public TextView tvYemekAdi, tvKullaniciAdi, tvPuan;
+        public TextView tvYemekAdi, tvKullaniciAdi, tvPuan, tvMesafe;
         public ImageView ivYemek, ivKullanici;
 
         public YemekViewHolder(View view) {
@@ -34,14 +36,16 @@ public class AdapterYemekler extends RecyclerView.Adapter<AdapterYemekler.YemekV
             tvKullaniciAdi = (TextView) view.findViewById(R.id.tv_kullanici_adi);
             ivYemek = (ImageView) view.findViewById(R.id.iv_yemek_resim);
             ivKullanici = (ImageView) view.findViewById(R.id.iv_kullanici);
+            tvMesafe = (TextView) view.findViewById(R.id.tv_mesafe);
             tvPuan = (TextView) view.findViewById(R.id.tv_puan);
         }
     }
 
 
-    public AdapterYemekler(Context mContext, List<Yemek> albumList) {
+    public AdapterYemekler(Context mContext, List<Yemek> albumList, HashMap<String,Integer> mesafeler) {
         this.mContext = mContext;
         this.listYemek = albumList;
+        this.mesafeler = mesafeler;
     }
 
     @Override
@@ -56,7 +60,8 @@ public class AdapterYemekler extends RecyclerView.Adapter<AdapterYemekler.YemekV
         Yemek yemek = listYemek.get(position);
         holder.tvYemekAdi.setText(yemek.getAdi());
         holder.tvPuan.setText(""+yemek.getPuan());
-       holder.tvKullaniciAdi.setText(yemek.getSahipAdi());
+        holder.tvKullaniciAdi.setText(yemek.getSahipAdi());
+        holder.tvMesafe.setText(String.valueOf(mesafeler.get(yemek.getSahipId()))+ "KM");
 
         Picasso.with(mContext).load(yemek.getResimUrl())
                 .memoryPolicy (MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)

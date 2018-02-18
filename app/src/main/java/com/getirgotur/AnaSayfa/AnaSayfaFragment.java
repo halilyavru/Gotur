@@ -3,6 +3,7 @@ package com.getirgotur.AnaSayfa;
 import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -16,6 +17,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -45,9 +47,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -71,6 +75,7 @@ public class AnaSayfaFragment extends Fragment implements OnMapReadyCallback, Lo
 
     private DatabaseReference databaseReference;
     private Kullanici kullanici;
+    private HashMap<String,Integer> mesafeler =  new HashMap<>();
 
     @Nullable
     @Override
@@ -107,7 +112,7 @@ public class AnaSayfaFragment extends Fragment implements OnMapReadyCallback, Lo
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
 
         listYemek = new ArrayList<>();
-        adapter = new AdapterYemekler(getActivity(), listYemek);
+        adapter = new AdapterYemekler(getActivity(), listYemek , mesafeler);
 
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 2);
         recyclerView.setLayoutManager(mLayoutManager);
@@ -137,15 +142,31 @@ public class AnaSayfaFragment extends Fragment implements OnMapReadyCallback, Lo
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 listYemek.clear();
+                String [] konum2 = kullanici.getKonum().split(",");
                 for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
                     for (DataSnapshot subSnapshot: snapshot.getChildren()) {
                         Yemek yemek = subSnapshot.getValue(Yemek.class);
+                        String [] konum1 = yemek.getSahipKonum().split(",");
+                        float [] mesafe = new float[1];
+                                Location.distanceBetween(Double.parseDouble(konum1[0]),Double.parseDouble(konum1[1]),
+                                Double.parseDouble(konum2[0]), Double.parseDouble(konum2[1]),mesafe);
+                        System.out.println("Mesafe: "+mesafe[0]);
+                        mesafeler.put(yemek.getSahipId(),(int)mesafe[0]/1000);
                         if(yemek.getStok()>0 && !yemek.getSahipId().equals(kullanici.getId())){
                             listYemek.add(yemek);
                         }
+                        for (String key :
+                                mesafeler.keySet()) {
+                            System.out.println("key: "+key+", value: "+mesafeler.get(key));
 
+                        }
 
                     }
+                }
+
+
+                for (String key:mesafeler.keySet()) {
+                    //System.out.println("Mesafe "+key+" --  "+));
                 }
                 adapter.notifyDataSetChanged();
             }
@@ -253,7 +274,7 @@ public class AnaSayfaFragment extends Fragment implements OnMapReadyCallback, Lo
                 databaseReference = FirebaseDatabase.getInstance().getReference().child("Alilanlar").child(kullanici.getId()).push();
                 String id = databaseReference.getKey();
                 siparis.setYemekId(yemek.getId());
-                siparis.setSahipId(kullanici.getId());
+                siparis.setSahipId(yemek.getSahipId());
                 siparis.setResimUrl(yemek.getResimUrl());
                 siparis.setYemekAdi(yemek.getAdi());
                 siparis.setYemekFiyati(yemek.getFiyat());
@@ -362,7 +383,8 @@ public class AnaSayfaFragment extends Fragment implements OnMapReadyCallback, Lo
             }
         });
 
-
-
     }
+
+
+
 }

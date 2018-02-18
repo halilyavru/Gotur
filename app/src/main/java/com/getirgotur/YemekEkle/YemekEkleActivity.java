@@ -368,6 +368,7 @@ public class YemekEkleActivity extends AppCompatActivity implements View.OnClick
         {
             final ProgressDialog progressDialog = new ProgressDialog(this);
             progressDialog.setTitle("Yemek Ekleniyor");
+            progressDialog.setCancelable(false);
             progressDialog.show();
 
 
