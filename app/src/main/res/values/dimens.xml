@@ -12,4 +12,10 @@
     <dimen name="padding_top">8dp</dimen>
     <dimen name="remove_icon_dimen">24dp</dimen>
     <dimen name="remove_icon_margin">4dp</dimen>
+
+
+    <dimen name="bosluk">1dp</dimen>
+
+
+
 </resources>

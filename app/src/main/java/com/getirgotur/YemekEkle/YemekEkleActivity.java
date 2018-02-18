@@ -68,14 +68,12 @@ public class YemekEkleActivity extends AppCompatActivity implements View.OnClick
     private boolean etDurum = true;
     private Uri filePath = null;
     private final NumberFormat format = NumberFormat.getIntegerInstance(Locale.ITALIAN);
-    private String [] arrayStok = new String[99];
+    private String [] arrayStok = new String[100];
     private int stok = 0;
     private TextView tvStok;
     private Map<String,String> mapYemekler ;
     private AutoCompleteTextView acYemek;
 
-    //AUTH
-    public FirebaseAuth mAuth;
     //FİREBASE
     private ValueEventListener valueEventListener;
     private DatabaseReference databaseReference;
@@ -99,8 +97,6 @@ public class YemekEkleActivity extends AppCompatActivity implements View.OnClick
             arrayStok[i] = (i+1)+"";
         }
 
-        mAuth = FirebaseAuth.getInstance();
-
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
         databaseReference = FirebaseDatabase.getInstance().getReference().child("Yemek Kodları");
@@ -119,8 +115,8 @@ public class YemekEkleActivity extends AppCompatActivity implements View.OnClick
 
 
                 ArrayAdapter<String> adapter = new ArrayAdapter<String> (YemekEkleActivity.this, android.R.layout.select_dialog_item, arrayYemekler);
-                acYemek.setThreshold(1);//will start working from first character
-                acYemek.setAdapter(adapter);//setting the adapter data into the AutoCompleteTextView
+                acYemek.setThreshold(1);
+                acYemek.setAdapter(adapter);
 
 
                 databaseReference.removeEventListener(valueEventListener);
@@ -172,7 +168,7 @@ public class YemekEkleActivity extends AppCompatActivity implements View.OnClick
                         }
                     });
                 }else{
-                    etChipEkle.setError("En az 2 harften giriniz.");
+                    etChipEkle.setError("En az 2 harf giriniz.");
                 }
 
 
@@ -270,25 +266,29 @@ public class YemekEkleActivity extends AppCompatActivity implements View.OnClick
                 builder.setTitle(R.string.uyari);
 
                 String mesaj = "";
+
                 if(filePath == null){
                     mesaj = "Resim Seçiniz";
                 } else if (acYemek.getText() == null || acYemek.getText().toString().trim().length()<3) {
                     mesaj = "Yemek Adı En Az 3 Karakter Olmalı.";
-                } else if (etFiyat.getText() == null || etFiyat.getText().toString().trim().length() == 0) {
+                }else if(mapYemekler.get(acYemek.getText().toString()) == null){
+                    mesaj = "Listede olan bir yemek seçiniz.";
+                }else if (etFiyat.getText() == null || etFiyat.getText().toString().trim().length() == 0) {
 
                 }else{
-                    String imageUrl = UUID.randomUUID().toString();
-                    uploadImage(imageUrl);
+
                     Yemek yemek =  new Yemek();
+                    yemek.setSahipAdi(kullanici.getAdi());
                     yemek.setAdi(acYemek.getText().toString());
+                    yemek.setSahipKonum(kullanici.getKonum());
                     yemek.setFiyat(etFiyat.getText().toString());
-                    yemek.setId(mapYemekler.get(acYemek.getText()));
+                    yemek.setId(mapYemekler.get(acYemek.getText().toString()));
                     yemek.setPuan(0.0);
                     yemek.setFiyatBirimi("TL");
                     yemek.setPuanlamaSayisi(0);
                     yemek.setSahipId(kullanici.getId());
                     yemek.setStok(stok);
-                    yemek.setResimUrl(imageUrl);
+                    yemek.setResimUrl("");
 
                     String yemeginIcindekiler = "";
                     for (String key : mapChips.keySet()) {
@@ -299,24 +299,14 @@ public class YemekEkleActivity extends AppCompatActivity implements View.OnClick
                         yemeginIcindekiler+=key;
 
                     }
+                    yemek.setMalzeme(yemeginIcindekiler);
 
-                    databaseReference = FirebaseDatabase.getInstance().getReference().child("Yemekler").child(mapYemekler.get(acYemek.getText().toString())).child(kullanici.getId());
-                    databaseReference.setValue(yemek);
-                    databaseReference.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            System.out.println("Yemekler : "+dataSnapshot);
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });
+                    Yemek [] arrayYemek = {yemek};
+                    uploadImage(arrayYemek);
 
                 }
 
-                if (mesaj.trim().length() != 0) {
+                if (mesaj.trim().length() > 0) {
                     builder.setMessage(mesaj);
                     builder.setNegativeButton(R.string.tamam, new DialogInterface.OnClickListener() {
                         @Override
@@ -372,21 +362,37 @@ public class YemekEkleActivity extends AppCompatActivity implements View.OnClick
         }
     }
 
-    private void uploadImage(String imageUrl) {
+    private void uploadImage( final Yemek [] arrayYemek) {
 
         if(filePath != null)
         {
             final ProgressDialog progressDialog = new ProgressDialog(this);
-            progressDialog.setTitle("Yükleniyor...");
+            progressDialog.setTitle("Yemek Ekleniyor");
             progressDialog.show();
 
-            StorageReference ref = storageReference.child("images/"+ imageUrl);
+
+            StorageReference ref = storageReference.child("images/"+ UUID.randomUUID().toString());
             ref.putFile(filePath)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             progressDialog.dismiss();
-                            Toast.makeText(YemekEkleActivity.this, "Resim Yüklendi.", Toast.LENGTH_SHORT).show();
+
+                            arrayYemek[0].setResimUrl(taskSnapshot.getDownloadUrl().toString());
+                            databaseReference = FirebaseDatabase.getInstance().getReference().child("Yemekler").child(mapYemekler.get(acYemek.getText().toString())).child(kullanici.getId());
+                            databaseReference.setValue(arrayYemek[0]);
+                            databaseReference.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
+                            //Toast.makeText(YemekEkleActivity.this, "Resim Yüklendi.", Toast.LENGTH_SHORT).show();
                             finish();
                         }
                     })

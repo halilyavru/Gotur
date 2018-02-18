@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="12dp">
+
+    <!--Sipariş Miktari -->
+
+    <LinearLayout
+        android:id="@+id/ll_siparis_miktari"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="6dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:clickable="true">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/siparis_miktari"
+                android:textColor="@color/gri900"
+                android:layout_marginLeft="6dp"
+                android:layout_marginRight="6dp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="*"
+                android:textColor="@android:color/holo_red_dark"
+                android:textStyle="bold"/>
+
+        </LinearLayout>
+
+
+
+        <Spinner
+            android:layout_marginTop="3dp"
+            android:id="@+id/sp_siparis_miktari"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/spinner_bg"/>
+
+    </LinearLayout>
+
+
+
+    <!-- Sipariş Not -->
+
+    <LinearLayout
+        android:id="@+id/ll_siparis_not"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="6dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/siparis_mesaj"
+                android:textColor="@color/gri900"
+                android:layout_marginLeft="6dp"
+                android:layout_marginRight="6dp"
+                android:textStyle="bold"/>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="*"
+                android:textColor="@android:color/holo_red_dark"
+                android:textStyle="bold"/>
+
+        </LinearLayout>
+
+
+
+        <EditText
+            android:id="@+id/et_siparis_not"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp"
+            android:hint="@string/giriniz"
+            android:maxLines="10"
+            android:maxLength="400"
+            android:minLines="1"
+            android:gravity="left|top"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="6dp"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/tv_siparis_toplam"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="0Tl"
+            android:textColor="@color/yesil400"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp"
+            android:textStyle="bold"
+            android:gravity="center|right"/>
+
+    </LinearLayout>
+
+
+
+</LinearLayout>

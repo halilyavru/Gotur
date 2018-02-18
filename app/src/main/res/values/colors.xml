@@ -2,14 +2,14 @@
 <resources>
     <color name="colorPrimary">#d40000</color>
     <color name="colorPrimaryDark">#de0f17</color>
-    <color name="colorAccent">#cf8d2e</color>
+    <color name="colorAccent">#19212B</color>
 
     <color name="beyaz">#FFFFFF</color>
     <color name="mavigri500">#607D8B</color>
     <color name="baslik_bg">#f5f5f5</color>
     <color name="yesil400">#66BB6A</color>
 
-
+    <color name="sari800">#F9A825</color>
 
     <!-- gri -->
 

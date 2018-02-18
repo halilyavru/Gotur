@@ -16,13 +16,15 @@ public class Yemek implements Serializable {
     private String malzeme;
     private int stok;
     private String sahipId;
+    private String sahipAdi;
+    private String sahipKonum;
     private double puan;
     private int puanlamaSayisi;
 
     public Yemek() {
     }
 
-    public Yemek(String id, String adi, String resimUrl, String fiyat, String fiyatBirimi, String malzeme, int stok, String sahipId, double puan, int puanlamaSayisi) {
+    public Yemek(String id, String adi, String resimUrl, String fiyat, String fiyatBirimi, String malzeme, int stok, String sahipId, String sahipAdi, String sahipKonum, double puan, int puanlamaSayisi) {
         this.id = id;
         this.adi = adi;
         this.resimUrl = resimUrl;
@@ -31,9 +33,12 @@ public class Yemek implements Serializable {
         this.malzeme = malzeme;
         this.stok = stok;
         this.sahipId = sahipId;
+        this.sahipAdi = sahipAdi;
+        this.sahipKonum = sahipKonum;
         this.puan = puan;
         this.puanlamaSayisi = puanlamaSayisi;
     }
+
 
     public String getId() {
         return id;
@@ -97,6 +102,22 @@ public class Yemek implements Serializable {
 
     public void setSahipId(String sahipId) {
         this.sahipId = sahipId;
+    }
+
+    public String getSahipAdi() {
+        return sahipAdi;
+    }
+
+    public void setSahipAdi(String sahipAdi) {
+        this.sahipAdi = sahipAdi;
+    }
+
+    public String getSahipKonum() {
+        return sahipKonum;
+    }
+
+    public void setSahipKonum(String sahipKonum) {
+        this.sahipKonum = sahipKonum;
     }
 
     public double getPuan() {

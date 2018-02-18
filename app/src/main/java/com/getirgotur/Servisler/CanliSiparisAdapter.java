@@ -13,7 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.getirgotur.R;
-import com.getirgotur.Siparis;
+import com.getirgotur.Siparisler.Siparis;
 
 import java.util.ArrayList;
 import java.util.List;

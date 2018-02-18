@@ -11,10 +11,24 @@
             android:id="@+id/nav_location"
             android:icon="@drawable/ic_location_on_black_24dp"
             android:title="Adresler" />
+
+        <item android:title="Siparişler">
+            <menu>
+                <item
+                    android:id="@+id/nav_sattiklarin"
+                    android:icon="@drawable/ic_menu_share"
+                    android:title="Sattıklarım" />
+                <item
+                    android:id="@+id/nav_aldiklarim"
+                    android:icon="@drawable/ic_menu_send"
+                    android:title="Aldıklarım" />
+            </menu>
+        </item>
+
         <item
-            android:id="@+id/nav_history"
-            android:icon="@drawable/ic_history_black_24dp"
-            android:title="Siparişler" />
+            android:id="@+id/nav_exit"
+            android:icon="@drawable/ic_cancel_black_18dp"
+            android:title="Çıkış" />
 
     </group>
 

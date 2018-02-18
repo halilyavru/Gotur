@@ -93,9 +93,9 @@ public class GirisFragment extends Fragment implements OnMapReadyCallback, Locat
                 }else{
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                     builder.setTitle(R.string.uyari);
-                    if(etKullaniciAdi.getText() != null || etKullaniciAdi.getText().toString().trim().length()<3){
+                    if(etKullaniciAdi.getText() == null || etKullaniciAdi.getText().toString().trim().length()<3){
                         builder.setMessage("Kullanıcı Adı En az 3 Harften oluşmalı.");
-                    }else if(currentLat != 0 || currentLon != 0){
+                    }else if(currentLat == 0 || currentLon == 0){
                         builder.setMessage("Harita üzerinden bir konum seçiniz.");
                     }
                     builder.setPositiveButton(R.string.tamam, new DialogInterface.OnClickListener() {
@@ -124,12 +124,15 @@ public class GirisFragment extends Fragment implements OnMapReadyCallback, Locat
             @Override
             public void onMapLoaded() {
 
-                LatLngBounds TURKIYE = new LatLngBounds(
-                        new LatLng(36, 26), new LatLng(42, 45));
+                if(currentLat == 0 && currentLon == 0){
+                    LatLngBounds TURKIYE = new LatLngBounds(
+                            new LatLng(36, 26), new LatLng(42, 45));
 
-                // Set the camera to the greatest possible zoom level that includes the
-                // bounds
-                mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(TURKIYE, 10));
+                    // Set the camera to the greatest possible zoom level that includes the
+                    // bounds
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(TURKIYE, 10));
+                }
+
 
 
             }
@@ -148,7 +151,7 @@ public class GirisFragment extends Fragment implements OnMapReadyCallback, Locat
                 }
                 marker = mMap.addMarker(new MarkerOptions()
                         .position(new LatLng(currentLat, currentLon))
-                        .title("Burayı Konumum Olarak Belirle.")
+                        .title("Bu Nokta Konumunuz Olarak Belirlendi")
                         .snippet(null)
                         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
                 );
@@ -157,11 +160,11 @@ public class GirisFragment extends Fragment implements OnMapReadyCallback, Locat
 
             }
         });
-        List<LatLng> listLatLong =  new ArrayList<>();
+        /*List<LatLng> listLatLong =  new ArrayList<>();
         listLatLong.add(new LatLng(40.95650372593243,29.109800532460216));
         listLatLong.add(new LatLng(40.9522654778032,29.109902791678905));
 
-        drawRouteOnMap(mMap, listLatLong);
+        drawRouteOnMap(mMap, listLatLong);*/
 
     }
 

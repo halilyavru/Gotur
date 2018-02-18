@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="6dp">
+
+
+    <ImageView
+        android:id="@+id/iv_yemek_resim"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:scaleType="centerCrop"/>
+
+    <TextView
+        android:id="@+id/tv_yemek_adi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/iv_yemek_resim"
+        android:layout_toRightOf="@+id/iv_yemek_resim"
+        android:text="TextView"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
+
+    <TextView
+        android:id="@+id/tv_tutar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_yemek_adi"
+        android:layout_toEndOf="@+id/iv_yemek_resim"
+        android:layout_toRightOf="@+id/iv_yemek_resim"
+        android:text="TextView"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
+
+    <TextView
+        android:id="@+id/tv_mesafe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:text="800m"
+        android:textColor="@android:color/holo_red_dark"/>
+
+    <TextView
+        android:id="@+id/tv_stok"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/iv_yemek_resim"
+        android:layout_alignEnd="@+id/iv_yemek_resim"
+        android:layout_alignRight="@+id/iv_yemek_resim"
+        android:text="10x"
+        android:layout_margin="6dp"
+        android:textColor="@color/sari800"/>
+
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/btn_onayla"
+        android:textColor="@color/beyaz"
+        app:backgroundTint="@color/yesil400"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableTint="@color/beyaz"
+        android:text="@string/onayla"
+        android:layout_alignBottom="@+id/iv_yemek_resim"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:id="@+id/siparis_durumu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/iv_yemek_resim"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:text="Onay Bekliyor"
+        android:textColor="@color/gri800"/>
+
+
+</RelativeLayout>

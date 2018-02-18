@@ -19,4 +19,10 @@
     <string name="fiyat">Fiyat</string>
     <string name="icindekiler">İçindekiler</string>
     <string name="giris_yap">Giriş Yap</string>
+    <string name="siparis">Sipariş</string>
+    <string name="siparis_miktari">Sipariş  Miktarı</string>
+    <string name="siparis_mesaj">Sipariş Mesaj</string>
+    <string name="vazgec">Vazgeç</string>
+    <string name="siparis_ver">Siparş Ver</string>
+    <string name="onayla">Onayla</string>
 </resources>

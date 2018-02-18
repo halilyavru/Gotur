@@ -1,0 +1,88 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/card_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_margin="6dp"
+        android:elevation="3dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/iv_yemek_resim"
+                android:layout_width="match_parent"
+                android:layout_height="144dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:scaleType="centerCrop"/>
+
+            <TextView
+                android:id="@+id/tv_yemek_adi"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/iv_yemek_resim"
+                android:text=""
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:layout_margin="3dp"
+                android:textStyle="bold"/>
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_yemek_adi"
+                android:padding="3dp">
+
+                <ImageView
+                    android:id="@+id/iv_kullanici"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/bos_kullanici"/>
+
+                <TextView
+                    android:id="@+id/tv_kullanici_adi"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/iv_kullanici"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginLeft="12dp"
+                    android:maxLines="1"
+                    android:ellipsize="end"/>
+
+
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/tv_puan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:gravity="center"
+                android:textStyle="bold"
+                android:textSize="24dp"
+                android:layout_above="@+id/tv_yemek_adi"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:drawableLeft="@android:drawable/btn_star_big_on"
+                android:textColor="@color/beyaz"
+                android:background="#66000000"
+                android:layout_margin="6dp"
+                android:padding="6dp"/>
+
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>
